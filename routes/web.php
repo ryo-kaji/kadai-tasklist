@@ -13,11 +13,6 @@
 
 Route::get('/', 'TasklistsController@index');
 
-Route::resource('tasklists', 'TasklistsController');
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
 Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
@@ -28,4 +23,22 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+});
+
+//Route::get('/', 'TaskilistsController@index');
+
+// omit
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+    Route::resource('taskilists', 'TasklistsController', ['only' => ['store', 'destroy']]);
+});
+
+Route::get('/', 'TasklistsController@index');
+
+// omit
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+    Route::resource('tasklists', 'TasklistsController');
 });
